@@ -15,13 +15,15 @@ interface Props {
     closeForm: ()=>void;
     createEdit: (activity:Activity) =>void;
     deleteActivity :(id:string) => void;
+    submitting:boolean;
 }
 export default function ActivityDashboad({ activities ,selectedActivity, selectActivity, deleteActivity,
-                                           cancelSelectedActivity,editMode,openForm,closeForm,createEdit}: Props) {
+                                           cancelSelectedActivity,editMode,openForm,closeForm,createEdit,
+                                           submitting}: Props) {
     return (
         <Grid>
             <Grid.Column width='10'>
-                 <ActivityList activities ={activities} selectActivity ={selectActivity} deleteActivity ={deleteActivity}  />
+                 <ActivityList activities ={activities} selectActivity ={selectActivity} deleteActivity ={deleteActivity}  submitting={submitting}/>
             </Grid.Column>
             <Grid.Column width='6'>
                 { selectedActivity && !editMode &&
@@ -30,7 +32,7 @@ export default function ActivityDashboad({ activities ,selectedActivity, selectA
                     openForm ={openForm}/> 
                  }
                  {editMode &&
-                  <ActivityForm activity={selectedActivity} closeForm={closeForm} createEdit={createEdit} />
+                  <ActivityForm  submitting={submitting} activity={selectedActivity} closeForm={closeForm} createEdit={createEdit} />
                 }
                 
             </Grid.Column>
