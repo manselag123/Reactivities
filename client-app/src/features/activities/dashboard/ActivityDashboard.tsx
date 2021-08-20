@@ -1,41 +1,25 @@
-import React from 'react';
+import { observer } from 'mobx-react-lite';
+import React, { useEffect } from 'react';
 import { Grid } from 'semantic-ui-react';
-import { Activity } from '../../../models/activity'; 
-import ActivityDetails from '../details/ActivityDetails';
-import ActivityForm from '../forms/ActivityForm';
-import ActivityList from './ActivityList';
- 
-interface Props {
-    activities: Activity[];
-    selectedActivity : Activity| undefined;
-    selectActivity : (id:string) =>void;
-    cancelSelectedActivity : () => void;
-    editMode: boolean;
-    openForm : (id:string)=>void;
-    closeForm: ()=>void;
-    createEdit: (activity:Activity) =>void;
-    deleteActivity :(id:string) => void;
-    submitting:boolean;
-}
-export default function ActivityDashboad({ activities ,selectedActivity, selectActivity, deleteActivity,
-                                           cancelSelectedActivity,editMode,openForm,closeForm,createEdit,
-                                           submitting}: Props) {
-    return (
-        <Grid>
-            <Grid.Column width='10'>
-                 <ActivityList activities ={activities} selectActivity ={selectActivity} deleteActivity ={deleteActivity}  submitting={submitting}/>
-            </Grid.Column>
-            <Grid.Column width='6'>
-                { selectedActivity && !editMode &&
-                    <ActivityDetails  activity={ selectedActivity} 
-                    cancelSelectedActivity ={cancelSelectedActivity}
-                    openForm ={openForm}/> 
-                 }
-                 {editMode &&
-                  <ActivityForm  submitting={submitting} activity={selectedActivity} closeForm={closeForm} createEdit={createEdit} />
-                }
-                
-            </Grid.Column>
-        </Grid>
-    )
-}
+import LoadingComponet from '../../../App/layout/LoadingComponet';
+import { useStore } from '../../../stores/store';
+import ActivityList from './ActivityList'; 
+
+export default observer(function ActivityDashboad() {
+  const { activityStore } = useStore();
+  const { loadActivities, loadingInitial, activityRegistry } = activityStore;
+  useEffect(() => {
+    if (activityRegistry.size <= 0) loadActivities();
+  }, [loadActivities]);
+  if (loadingInitial) return <LoadingComponet />
+  return (
+    <Grid>
+      <Grid.Column width='10'>
+        <ActivityList />
+      </Grid.Column>
+      <Grid.Column width='6'>
+        <h1>  Activity Filter </h1>
+      </Grid.Column>
+    </Grid>
+  )
+})
