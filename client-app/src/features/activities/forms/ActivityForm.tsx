@@ -2,8 +2,7 @@ import { observer } from 'mobx-react-lite';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { Button, Form, Segment } from 'semantic-ui-react';
-import LoadingComponet from '../../../App/layout/LoadingComponet';
-import { Activity } from '../../../models/activity';
+import LoadingComponet from '../../../App/layout/LoadingComponet'; 
 import { useStore } from '../../../stores/store';
 
 export default observer(function ActivityForm() {
@@ -53,8 +52,4 @@ export default observer(function ActivityForm() {
             </Form>
         </Segment>
     )
-})
-
-function uuidv4() {
-    throw new Error('Function not implemented.');
-}
+}) 

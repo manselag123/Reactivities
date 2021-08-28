@@ -22,6 +22,15 @@ export default class ActivityStore {
         return Array.from(this.activityRegistry.values()).sort((a, b) =>
             Date.parse(a.date) - Date.parse(b.date));
     }
+    get groupedActivites() {
+        return Object.entries(
+            this.activitoesByDate.reduce((activities, activity) => {
+                const date = activity.date;
+                activities[date]= activities[date] ? [...activities[date], activity] : [activity];
+                return activities;
+            }, {} as {[Key: string]: Activity[] })
+        )
+    }
     loadActivities = async () => {
 
         this.setLoadingInitial(true);
@@ -29,7 +38,7 @@ export default class ActivityStore {
             const activites = await agent.activities.list();
             activites.forEach(activity => {
                 this.setActivity(activity);
-            }) 
+            })
             this.setLoadingInitial(false);
 
         } catch (error) {
@@ -47,7 +56,7 @@ export default class ActivityStore {
                 const activity = await agent.activities.details(id);
                 this.setActivity(activity);
                 this.selectedActivity = activity;
-                this.setLoadingInitial(false); 
+                this.setLoadingInitial(false);
                 return activity;
             } catch (error) {
                 console.log(error);
@@ -55,11 +64,11 @@ export default class ActivityStore {
             }
         }
         else {
-            this.selectedActivity = activity;  
+            this.selectedActivity = activity;
             return activity;
         }
     }
-    
+
     setActivity = (activity: Activity) => {
         activity.date = activity.date.split('T')[0];
         this.activityRegistry.set(activity.id, activity);
@@ -81,7 +90,7 @@ export default class ActivityStore {
                 this.activityRegistry.set(activity.id, activity);
                 this.setLoadingActivity(false);
                 this.setEditMode(false);
-            }); 
+            });
         } catch (error) {
             console.log(error);
             runInAction(() => {

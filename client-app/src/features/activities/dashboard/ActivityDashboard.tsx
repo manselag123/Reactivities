@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Grid } from 'semantic-ui-react';
 import LoadingComponet from '../../../App/layout/LoadingComponet';
 import { useStore } from '../../../stores/store';
+import ActivityFilters from '../details/ActivityFilter';
 import ActivityList from './ActivityList'; 
 
 export default observer(function ActivityDashboad() {
@@ -10,7 +11,7 @@ export default observer(function ActivityDashboad() {
   const { loadActivities, loadingInitial, activityRegistry } = activityStore;
   useEffect(() => {
     if (activityRegistry.size <= 0) loadActivities();
-  }, [loadActivities]);
+  }, [loadActivities,activityRegistry]);
   if (loadingInitial) return <LoadingComponet />
   return (
     <Grid>
@@ -18,7 +19,7 @@ export default observer(function ActivityDashboad() {
         <ActivityList />
       </Grid.Column>
       <Grid.Column width='6'>
-        <h1>  Activity Filter </h1>
+       <ActivityFilters />
       </Grid.Column>
     </Grid>
   )
